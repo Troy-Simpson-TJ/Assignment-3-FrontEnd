@@ -1,0 +1,221 @@
+
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background-color: #000;
+  color: #fff;
+  text-align: center;
+  transition: background-color 0.3s ease; /* smooth background transitions */
+}
+
+/* Center page container */
+.page {
+  padding: 40px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+/* Styliing for the Navbar */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #111;
+  padding: 15px 40px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5); /* subtle shadow */
+  position: sticky;
+  top: 0;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.navbar:hover {
+  background-color: #00d0ff; /* slight hover effect */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.7);
+}
+
+.navbar .logo {
+  height: 60px;
+  width: auto;
+  transition: transform 0.3s ease;
+}
+
+.navbar .logo:hover {
+  transform: scale(1.05); /* subtle zoom on hover */
+}
+
+.nav-links {
+  display: flex;
+  gap: 20px;
+}
+
+.nav-links a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: bold;
+  position: relative;
+  transition: color 0.3s ease;
+}
+
+.nav-links a::after {
+  content: '';
+  display: block;
+  height: 2px;
+  background: #78badc; /* accent color underline */
+  transition: width 0.3s;
+  width: 0;
+}
+
+.nav-links a:hover {
+  color: #78badc;
+}
+
+.nav-links a:hover::after {
+  width: 100%; /* underline expands on hover */
+}
+
+/* Style for the Footer */
+footer {
+  margin-top: 40px;
+  padding: 20px;
+  background-color: #111;
+  color: #fff;
+  transition: background-color 0.3s ease;
+}
+
+footer:hover {
+  background-color: #03caed;
+}
+
+/* Style for the Header */
+h1, h2, h3 {
+  margin: 20px 0;
+  color: #fff;
+  transition: color 0.3s ease;
+}
+
+h1:hover, h2:hover, h3:hover {
+  color: #777777;
+}
+
+/* Style for the Images */
+.projects img,
+.services img {
+  width: 500px;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 6px;
+  margin: 10px auto;
+  display: block;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.projects img:hover,
+.services img:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.2);
+}
+
+/* Style for the List Component Cards*/
+.list-item {
+  margin: 20px;
+  padding: 15px;
+  background: #0430cf;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(255,255,255,0.1);
+  max-width: 1000px;
+  text-align: center;
+  color: #fff;
+}
+
+.list-item:hover {
+  box-shadow: 0 8px 20px rgba(255, 255, 255, 0.3);
+  background: #01cee4;
+}
+
+/* Style for the Contact Page */
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  max-width: 500px;
+  width: 100%;
+  margin-top: 20px;
+}
+
+.contact-form input,
+.contact-form textarea {
+  padding: 10px;
+  border-radius: 6px;
+  border: none;
+  outline: none;
+  font-size: 1rem;
+  width: 100%;
+  transition: box-shadow 0.3s ease;
+}
+
+.contact-form input:focus,
+.contact-form textarea:focus {
+  box-shadow: 0 0 8px #78badc;
+}
+
+.contact-form textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.contact-form button {
+  padding: 12px;
+  background-color: #78badc;
+  color: #000;
+  font-weight: bold;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.contact-form button:hover {
+  background-color: #e3e684;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+/* Profile Image Styles */
+.profile-pic {
+  width: 200px;
+  height: 200px;
+  border-radius: 10%;
+  object-fit: cover;
+  margin: 20px 0;
+  border: 3px solid #fff;
+}
+
+.profile-pic:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(255,255,255,0.3);
+}
+
+.about p, .home .mission {
+  text-align: center;
+  max-width: 700px;
+  margin: 10px auto;
+  color: #fff;
+  line-height: 1.6;
+}
+
+.about a {
+  display: inline-block;
+  margin-top: 15px;
+  color: #e3e684;
+  text-decoration: none;
+  font-weight: bold;
+  transition: color 0.3s ease;
+}
+
+.about a:hover {
+  color: #78badc;
+  text-decoration: underline;
+}
