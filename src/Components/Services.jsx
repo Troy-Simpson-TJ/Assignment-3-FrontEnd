@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import ListComponent from "../Components/ListComponent";
 import { api } from "../api";
-import { useAuth } from "../context/authContext";
+import { useAuth } from "../context/authContext.jsx";
 import service1 from "../assets/service1.jpg";
 import service2 from "../assets/service2.jpg";
 import service3 from "../assets/service3.jpg";

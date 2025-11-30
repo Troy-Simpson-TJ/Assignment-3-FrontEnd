@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { api } from "../api";
-import { useAuth } from "../context/authContext";
+import { useAuth } from "../context/authContext.jsx";
 
 function UsersAdmin() {
   const { user } = useAuth();

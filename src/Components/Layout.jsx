@@ -1,7 +1,7 @@
 import { Link, Outlet } from "react-router-dom";
 import image_logo from "../assets/troylogo.jpg";
 import Footer from "./Footer";
-import {useAuth} from "../context/authContext";
+import {useAuth} from "../context/authContext.jsx";
 
 function Layout (){
   const {user,logout} = useAuth();
