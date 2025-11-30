@@ -12,8 +12,7 @@ function UsersAdmin() {
     firstName: "",
     lastName: "",
     email: "",
-    username: "",
-    role: "",
+    // role removed per model: only firstName, lastName, email, password
   });
 
   // Load users when component mounts and user is logged in
@@ -57,8 +56,7 @@ function UsersAdmin() {
         firstName: "",
         lastName: "",
         email: "",
-        username: "",
-        role: "",
+        
       });
       setEditID(null);
     } catch (err) {
@@ -74,8 +72,7 @@ function UsersAdmin() {
       firstName: selectedUser.firstName || "",
       lastName: selectedUser.lastName || "",
       email: selectedUser.email || "",
-      username: selectedUser.username || "",
-      role: selectedUser.role || "",
+      
     });
   };
 
@@ -133,23 +130,7 @@ function UsersAdmin() {
               onChange={handleChange}
               required
             />
-
-            <input
-              type="text"
-              name="username"
-              placeholder="Username"
-              value={form.username}
-              onChange={handleChange}
-              required
-            />
-
-            <input
-              type="text"
-              name="role"
-              placeholder="Role"
-              value={form.role}
-              onChange={handleChange}
-            />
+            {/* role removed - not part of model */}
 
             <button type="submit">{editID ? "Update User" : "Add User"}</button>
 
@@ -162,8 +143,6 @@ function UsersAdmin() {
                     firstName: "",
                     lastName: "",
                     email: "",
-                    username: "",
-                    role: "",
                   });
                 }}
               >
@@ -180,15 +159,14 @@ function UsersAdmin() {
           <tr>
             <th>Name</th>
             <th>Email</th>
-            <th>Username</th>
-            <th>Role</th>
+            {/* Role column removed - model does not include role */}
             <th style={{ width: "170px" }}>Actions</th>
           </tr>
         </thead>
         <tbody>
           {users.length === 0 && (
             <tr>
-              <td colSpan="5">No users found.</td>
+              <td colSpan="4">No users found.</td>
             </tr>
           )}
 
@@ -196,8 +174,7 @@ function UsersAdmin() {
             <tr key={u._id}>
               <td>{u.firstName} {u.lastName}</td>
               <td>{u.email}</td>
-              <td>{u.username}</td>
-              <td>{u.role}</td>
+              {/* role removed */}
               <td>
                 <button onClick={() => handleEdit(u)}>Edit</button>
                 <button onClick={() => handleDelete(u._id)}>Delete</button>

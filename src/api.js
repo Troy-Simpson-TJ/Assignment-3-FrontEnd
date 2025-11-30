@@ -25,17 +25,83 @@ async function request(path, options = {}) {
 
 export const api = {
   // AUTH
-  login: (data) =>
-    request("/auth/login", {
-      method: "POST",
-      body: JSON.stringify(data),
-    }),
+  // Robust login: try multiple common login endpoints so frontend works
+  // even if backend uses a different route prefix (e.g. /api/auth/login).
+  login: async (data) => {
+    const candidates = [
+      "/auth/login",
+      "/api/auth/login",
+      "/login",
+      "/users/login",
+      "/auth/signin",
+    ];
+
+    let lastErr = null;
+
+    for (const path of candidates) {
+      const url = API_BASE + (path.startsWith("/") ? path : `/${path}`);
+      try {
+        const res = await fetch(url, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data),
+        });
+
+        if (res.ok) return res.json();
+
+        if (res.status === 404) {
+          lastErr = new Error(`404 at ${url}`);
+          continue;
+        }
+
+        const text = await res.text();
+        throw new Error(text || `Request failed with status ${res.status}`);
+      } catch (err) {
+        lastErr = err;
+      }
+    }
+
+    throw new Error(lastErr?.message || "Login failed: no matching endpoint");
+  },
   
-  signup: (data) =>
-    request("/auth/signup", {
-      method: "POST",
-      body: JSON.stringify(data),
-    }),
+  // Robust signup: try multiple common signup endpoints so frontend works
+  // even if backend uses a different route prefix (e.g. /api/auth/signup).
+  signup: async (data) => {
+    const candidates = [
+      "/auth/signup",
+      "/api/auth/signup",
+      "/register",
+      "/users",
+      "/users/signup",
+    ];
+
+    let lastErr = null;
+
+    for (const path of candidates) {
+      const url = API_BASE + (path.startsWith("/") ? path : `/${path}`);
+      try {
+        const res = await fetch(url, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data),
+        });
+
+        if (res.ok) return res.json();
+
+        if (res.status === 404) {
+          lastErr = new Error(`404 at ${url}`);
+          continue;
+        }
+
+        const text = await res.text();
+        throw new Error(text || `Request failed with status ${res.status}`);
+      } catch (err) {
+        lastErr = err;
+      }
+    }
+
+    throw new Error(lastErr?.message || "Signup failed: no matching endpoint");
+  },
 
   // USERS
   getUsers: () => request("/users"),  
