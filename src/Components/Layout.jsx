@@ -1,8 +1,10 @@
 import { Link, Outlet } from "react-router-dom";
 import image_logo from "../assets/troylogo.jpg";
 import Footer from "./Footer";
+import {useAuth} from "../context/authContext";
 
 function Layout (){
+  const {user,logout} = useAuth();
   return (
     <div>
     <header className="navbar">
@@ -13,7 +15,28 @@ function Layout (){
           <Link to="/projects">Projects</Link>
           <Link to="/services">Services</Link>
           <Link to="/contact">Contact</Link>
-          <Link to="/admin/users">Users</Link>
+
+          {/* Admin/users only if logged in */}
+          {user && (
+            <Link to="/admin/users">
+              Users
+            </Link>
+          )}
+
+          {/* Auth links */}
+          {!user && (
+            <>
+              <Link to="/login">Login</Link>
+              <Link to="/register">Register</Link>
+            </>
+          )}
+
+          {/* Logout button */}
+          {user && (
+            <button onClick={logout}>
+              Logout
+            </button>
+          )}
       </nav>
     </header>
     <Outlet />

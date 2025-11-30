@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import { api } from "../api";
+import { useAuth } from "../context/authContext";
 
 function UsersAdmin() {
+  const { user } = useAuth();
   const [users, setUsers] = useState([]);
-  const [editID, seteditID] = useState(null);
+  const [editID, setEditID] = useState(null);
   const [message, setMessage] = useState("");
 
   const [form, setForm] = useState({
@@ -14,39 +16,38 @@ function UsersAdmin() {
     role: "",
   });
 
+  // Load users when component mounts and user is logged in
   useEffect(() => {
+    if (!user) return;
     api
       .getUsers()
       .then((res) => {
-        if (res.success) {
-          setUsers(res.data);
-        }
+        if (res.success) setUsers(res.data);
       })
       .catch((err) => {
         console.error(err);
         setMessage("Failed to load users.");
       });
-  }, []);
+  }, [user]);
 
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value,});
+    setForm({ ...form, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setMessage("");
 
+    if (!user) {
+      return setMessage("Must be logged in to modify users.");
+    }
+
     try {
       if (editID) {
-
         const updated = await api.updateUser(editID, form);
-
-        setUsers((prev) =>
-          prev.map((u) => (u._id === editID ? updated : u))
-        );
+        setUsers((prev) => prev.map((u) => (u._id === editID ? updated : u)));
         setMessage("User updated.");
       } else {
-
         const created = await api.createUser(form);
         setUsers((prev) => [...prev, created]);
         setMessage("User added.");
@@ -59,26 +60,27 @@ function UsersAdmin() {
         username: "",
         role: "",
       });
-
-      seteditID(null);
+      setEditID(null);
     } catch (err) {
       console.error(err);
       setMessage("Something went wrong.");
     }
   };
 
-  const handleEdit = (user) => {
-    seteditID(user._id);
+  const handleEdit = (selectedUser) => {
+    if (!user) return setMessage("You must be logged in to edit users.");
+    setEditID(selectedUser._id);
     setForm({
-      firstName: user.firstName || "",
-      lastName: user.lastName || "",
-      email: user.email || "",
-      username: user.username || "",
-      role: user.role || "",
+      firstName: selectedUser.firstName || "",
+      lastName: selectedUser.lastName || "",
+      email: selectedUser.email || "",
+      username: selectedUser.username || "",
+      role: selectedUser.role || "",
     });
   };
 
   const handleDelete = async (id) => {
+    if (!user) return setMessage("You must be logged in to delete users.");
     if (!window.confirm("Are you sure you want to delete this user?")) return;
 
     try {
@@ -95,12 +97,16 @@ function UsersAdmin() {
     <div className="page users-admin">
       <h2>Manage Users</h2>
 
-      <div>
+      {message && <p className="alert alert-info">{message}</p>}
+
+      <div className="user-form">
         <h5>{editID ? "Edit User" : "Add User"}</h5>
 
-        <form onSubmit={handleSubmit}>
-          <div>
-            <div>
+        {!user && <p className="text-invalid">You must be logged in to view users.</p>}
+
+        {user && (
+          <form onSubmit={handleSubmit}>
+            <div className="name-fields">
               <input
                 type="text"
                 name="firstName"
@@ -109,9 +115,6 @@ function UsersAdmin() {
                 onChange={handleChange}
                 required
               />
-            </div>
-
-            <div >
               <input
                 type="text"
                 name="lastName"
@@ -121,9 +124,7 @@ function UsersAdmin() {
                 required
               />
             </div>
-          </div>
 
-          <div>
             <input
               type="email"
               name="email"
@@ -132,9 +133,7 @@ function UsersAdmin() {
               onChange={handleChange}
               required
             />
-          </div>
 
-          <div>
             <input
               type="text"
               name="username"
@@ -143,9 +142,7 @@ function UsersAdmin() {
               onChange={handleChange}
               required
             />
-          </div>
 
-          <div>
             <input
               type="text"
               name="role"
@@ -153,30 +150,28 @@ function UsersAdmin() {
               value={form.role}
               onChange={handleChange}
             />
-          </div>
 
-          <button type="submit">
-            {editID ? "Update User" : "Add User"}
-          </button>
+            <button type="submit">{editID ? "Update User" : "Add User"}</button>
 
-          {editID && (
-            <button
-              type="button"
-              onClick={() => {
-                seteditID(null);
-                setForm({
-                  firstName: "",
-                  lastName: "",
-                  email: "",
-                  username: "",
-                  role: "",
-                });
-              }}
-            >
-              Cancel
-            </button>
-          )}
-        </form>
+            {editID && (
+              <button
+                type="button"
+                onClick={() => {
+                  setEditID(null);
+                  setForm({
+                    firstName: "",
+                    lastName: "",
+                    email: "",
+                    username: "",
+                    role: "",
+                  });
+                }}
+              >
+                Cancel
+              </button>
+            )}
+          </form>
+        )}
       </div>
 
       <h4>All Users</h4>
@@ -199,23 +194,13 @@ function UsersAdmin() {
 
           {users.map((u) => (
             <tr key={u._id}>
-              <td>
-                {u.firstName} {u.lastName}
-              </td>
+              <td>{u.firstName} {u.lastName}</td>
               <td>{u.email}</td>
               <td>{u.username}</td>
               <td>{u.role}</td>
               <td>
-                <button
-                  onClick={() => handleEdit(u)}
-                >
-                  Edit
-                </button>
-                <button
-                  onClick={() => handleDelete(u._id)}
-                >
-                  Delete
-                </button>
+                <button onClick={() => handleEdit(u)}>Edit</button>
+                <button onClick={() => handleDelete(u._id)}>Delete</button>
               </td>
             </tr>
           ))}
