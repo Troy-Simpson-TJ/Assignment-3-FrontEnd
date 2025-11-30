@@ -18,7 +18,7 @@ function Layout (){
 
           {/* Admin/users only if logged in */}
           {user && (
-            <Link to="/admin/users">
+            <Link to="/useradmin">
               Users
             </Link>
           )}

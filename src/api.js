@@ -1,8 +1,16 @@
-const API_BASE = import.meta.env.VITE_API_BASE;
-
+const _rawBase = import.meta.env.VITE_API_BASE || import.meta.env.VITE_APP_APIURL || "";
+const API_BASE = _rawBase.replace(/\/$/, "");
 
 async function request(path, options = {}) {
-  const res = await fetch(`${API_BASE}${path}`, {
+  if (!API_BASE) {
+    throw new Error(
+      "API base URL is not configured. Set `VITE_API_BASE` (or `VITE_APP_APIURL`) in your .env and restart the dev server."
+    );
+  }
+
+  const url = API_BASE + (path.startsWith("/") ? path : `/${path}`);
+
+  const res = await fetch(url, {
     headers: { "Content-Type": "application/json" },
     ...options,
   });

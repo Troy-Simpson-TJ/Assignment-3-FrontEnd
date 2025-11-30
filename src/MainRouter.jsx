@@ -7,6 +7,9 @@ import About from "./Components/About";
 import Projects from "./Components/Projects";
 import Services from "./Components/Services";
 import Contact from "./Components/Contact";
+import Login from "./Components/login.jsx";
+import Register from "./Components/Register.jsx";
+import UserAdmin from "./Components/UserAdmin.jsx";
 
 
 
@@ -19,6 +22,9 @@ function MainRouter() {
                 <Route path="/projects" element={<Projects />} />
                 <Route path="/services" element={<Services />} />
                 <Route path="/contact" element={<Contact />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Register />} />
+                <Route path="/useradmin" element={<UserAdmin />} />
             </Route>
         </Routes>
     );
