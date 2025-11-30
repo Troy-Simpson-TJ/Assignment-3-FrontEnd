@@ -7,7 +7,7 @@ import About from "./Components/About";
 import Projects from "./Components/Projects";
 import Services from "./Components/Services";
 import Contact from "./Components/Contact";
-import Login from "./Components/login.jsx";
+import Login from "./Components/Login.jsx";
 import Register from "./Components/Register.jsx";
 import UserAdmin from "./Components/UserAdmin.jsx";
 
