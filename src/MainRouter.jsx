@@ -1,12 +1,12 @@
 import { Routes, Route } from "react-router-dom";
-import Layout from "./Components/Layout";
+import Layout from "./Components/Layout.jsx";
 
 // pages (in the components folder)
-import Home from "./Components/Home";
-import About from "./Components/About";
-import Projects from "./Components/Projects";
-import Services from "./Components/Services";
-import Contact from "./Components/Contact";
+import Home from "./Components/Home.jsx";
+import About from "./Components/About.jsx";
+import Projects from "./Components/Projects.jsx";
+import Services from "./Components/Services.jsx";
+import Contact from "./Components/Contact.jsx";
 import Login from "./Components/Login.jsx";
 import Register from "./Components/Register.jsx";
 import UserAdmin from "./Components/UserAdmin.jsx";
