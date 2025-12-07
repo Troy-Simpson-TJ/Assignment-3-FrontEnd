@@ -3,6 +3,8 @@ const API_BASE = import.meta.env.VITE_API_BASE;
 if (!API_BASE) {
   console.error("VITE_API_BASE is MISSING. Check Render environment variables.");
 }
+console.log("API BASE FROM ENV:", import.meta.env.VITE_API_BASE);
+
 
 
 async function request(path, options = {}) {
