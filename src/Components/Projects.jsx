@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import ListComponent from "../Components/ListComponent";
-import { getProjects, createProject, deleteProject } from "../api";
+import { api } from "../api"; 
 import { useAuth } from "../context/authContext.jsx";
 import project1 from "../assets/project1.jpg";
 import project2 from "../assets/project2.jpg";
@@ -17,10 +17,15 @@ function Projects() {
   const [projects, setProjects] = useState([]);
   const [editID, setEditID] = useState(null);
   const [message, setMessage] = useState("");
-  const [form, setForm] = useState({ imagePath: "", title: "", text: "" });
+  const [form, setForm] = useState({
+    imagePath: "",
+    title: "",
+    text: ""
+  });
+
 
   useEffect(() => {
-    getProjects()
+    api.getProjects()
       .then(data => setProjects(data))
       .catch(() => setMessage("Could not load projects."));
   }, []);
@@ -35,27 +40,34 @@ function Projects() {
 
     try {
       if (editID) {
-        await deleteProject(editID);
-        const created = await createProject(form);
-        setProjects(prev => prev.map(p => (p._id === editID ? created : p)));
+        const updated = await api.updateProject(editID, form);
+        setProjects(prev =>
+          prev.map(p => (p._id === editID ? updated : p))
+        );
         setMessage("Project updated.");
       } else {
-        const created = await createProject(form);
+        const created = await api.createProject(form);
         setProjects(prev => [...prev, created]);
         setMessage("Project added.");
       }
 
       setForm({ imagePath: "", title: "", text: "" });
       setEditID(null);
-    } catch {
+    } catch (err) {
+      console.error(err);
       setMessage("Something went wrong.");
     }
   };
 
   const startEdit = (p) => {
     if (!user) return setMessage("You must be logged in to edit projects.");
+
     setEditID(p._id);
-    setForm({ imagePath: p.imagePath, title: p.title, text: p.text });
+    setForm({
+      imagePath: p.imagePath,
+      title: p.title,
+      text: p.text
+    });
   };
 
   const remove = async (id) => {
@@ -63,10 +75,11 @@ function Projects() {
     if (!window.confirm("Delete this project?")) return;
 
     try {
-      await deleteProject(id);
+      await api.deleteProject(id);
       setProjects(prev => prev.filter(p => p._id !== id));
       setMessage("Project deleted.");
-    } catch {
+    } catch (err) {
+      console.error(err);
       setMessage("Could not delete project.");
     }
   };
@@ -82,16 +95,42 @@ function Projects() {
 
       {user && (
         <form onSubmit={handleSubmit}>
-          <input name="imagePath" placeholder="Image URL" value={form.imagePath} onChange={handleChange} />
-          <input name="title" placeholder="Title" value={form.title} onChange={handleChange} required />
-          <textarea name="text" placeholder="Description" rows="3" value={form.text} onChange={handleChange} required />
+          <input
+            name="imagePath"
+            placeholder="Image URL"
+            value={form.imagePath}
+            onChange={handleChange}
+          />
 
-          <button type="submit">{editID ? "Update Project" : "Add Project"}</button>
+          <input
+            name="title"
+            placeholder="Title"
+            value={form.title}
+            onChange={handleChange}
+            required
+          />
+
+          <textarea
+            name="text"
+            placeholder="Description"
+            rows="3"
+            value={form.text}
+            onChange={handleChange}
+            required
+          />
+
+          <button type="submit">
+            {editID ? "Update Project" : "Add Project"}
+          </button>
+
           {editID && (
-            <button type="button" onClick={() => {
-              setEditID(null);
-              setForm({ imagePath: "", title: "", text: "" });
-            }}>
+            <button
+              type="button"
+              onClick={() => {
+                setEditID(null);
+                setForm({ imagePath: "", title: "", text: "" });
+              }}
+            >
               Cancel
             </button>
           )}
@@ -123,4 +162,3 @@ function Projects() {
 }
 
 export default Projects;
-
