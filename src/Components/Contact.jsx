@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/authContext.jsx";
-import { getContacts, createContact } from "../api";
+import { api } from "../api";
 
 export default function Contact() {
+  const { user } = useAuth();
   const [contacts, setContacts] = useState([]);
   const [form, setForm] = useState({
     firstName: "",
@@ -14,29 +14,28 @@ export default function Contact() {
   });
   const [error, setError] = useState(null);
 
+  // ✅ LOAD CONTACTS
   useEffect(() => {
-    (async () => {
-      try {
-        const data = await getContacts();
-        setContacts(data);
-      } catch (err) {
-        console.error("Failed to load contacts:", err);
-        setError("Could not load contacts.");
-      }
-    })();
+    api.getContacts()
+      .then(data => setContacts(data))
+      .catch(() => setError("Could not load contacts."));
   }, []);
 
   const handleChange = (e) => {
-    setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
+    setForm(prev => ({
+      ...prev,
+      [e.target.name]: e.target.value
+    }));
   };
 
+  // ✅ SUBMIT CONTACT
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await createContact(form);
-      // optionally re-fetch contacts
-      const updated = await getContacts();
+      await api.createContact(form);
+      const updated = await api.getContacts();
       setContacts(updated);
+
       setForm({
         firstName: "",
         lastName: "",
@@ -44,6 +43,7 @@ export default function Contact() {
         email: "",
         message: ""
       });
+
       setError(null);
     } catch (err) {
       console.error(err);
@@ -54,12 +54,36 @@ export default function Contact() {
   return (
     <div>
       <h2>Contact Me</h2>
+
       <form onSubmit={handleSubmit}>
-        <input name="firstName" value={form.firstName} onChange={handleChange} placeholder="First name" />
-        <input name="lastName"  value={form.lastName}  onChange={handleChange} placeholder="Last name" />
-        <input name="phone"     value={form.phone}     onChange={handleChange} placeholder="Phone" />
-        <input name="email"     value={form.email}     onChange={handleChange} placeholder="Email" />
-        {/* IMPORTANT: use textarea, not descriptionarea */}
+        <input
+          name="firstName"
+          value={form.firstName}
+          onChange={handleChange}
+          placeholder="First name"
+        />
+
+        <input
+          name="lastName"
+          value={form.lastName}
+          onChange={handleChange}
+          placeholder="Last name"
+        />
+
+        <input
+          name="phone"
+          value={form.phone}
+          onChange={handleChange}
+          placeholder="Phone"
+        />
+
+        <input
+          name="email"
+          value={form.email}
+          onChange={handleChange}
+          placeholder="Email"
+        />
+
         <textarea
           name="message"
           value={form.message}
@@ -67,15 +91,16 @@ export default function Contact() {
           placeholder="Your message"
           rows="5"
         />
+
         <button type="submit">Send Message</button>
       </form>
 
-      {error && <p style={{color:"red"}}>{error}</p>}
+      {error && <p style={{ color: "red" }}>{error}</p>}
 
-      <h3>Manage Contacts</h3>
+      <h3>Saved Contacts</h3>
       <ul>
         {contacts.map(c => (
-          <li key={c._id || c.id}>
+          <li key={c._id}>
             {c.firstName} {c.lastName} — {c.email}
           </li>
         ))}
