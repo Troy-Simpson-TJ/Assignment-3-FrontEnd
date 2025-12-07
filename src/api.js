@@ -1,11 +1,8 @@
-
 const API_BASE = import.meta.env.VITE_API_BASE;
 if (!API_BASE) {
   console.error("VITE_API_BASE is MISSING. Check Render environment variables.");
 }
 console.log("API BASE FROM ENV:", import.meta.env.VITE_API_BASE);
-
-
 
 async function request(path, options = {}) {
   const token = localStorage.getItem("token");
@@ -39,83 +36,83 @@ async function request(path, options = {}) {
 export const api = {
   // AUTH
   signup: (data) =>
-    request("/auth/signup", {
+    request("/api/auth/signup", {
       method: "POST",
       body: JSON.stringify(data),
     }),
 
   login: (data) =>
-    request("/auth/login", {
+    request("/api/auth/login", {
       method: "POST",
       body: JSON.stringify(data),
     }),
 
   // USERS
-  getUsers: () => request("/users"),
-  getUser: (id) => request(`/users/${id}`),
+  getUsers: () => request("/api/users"),
+  getUser: (id) => request(`/api/users/${id}`),
   createUser: (data) =>
-    request("/users", {
+    request("/api/users", {
       method: "POST",
       body: JSON.stringify(data),
     }),
   updateUser: (id, data) =>
-    request(`/users/${id}`, {
+    request(`/api/users/${id}`, {
       method: "PUT",
       body: JSON.stringify(data),
     }),
   deleteUser: (id) =>
-    request(`/users/${id}`, {
+    request(`/api/users/${id}`, {
       method: "DELETE",
     }),
 
   // PROJECTS
-  getProjects: () => request("/projects"),
+  getProjects: () => request("/api/projects"),
   createProject: (data) =>
-    request("/projects", {
+    request("/api/projects", {
       method: "POST",
       body: JSON.stringify(data),
     }),
   updateProject: (id, data) =>
-    request(`/projects/${id}`, {
+    request(`/api/projects/${id}`, {
       method: "PUT",
       body: JSON.stringify(data),
     }),
   deleteProject: (id) =>
-    request(`/projects/${id}`, {
+    request(`/api/projects/${id}`, {
       method: "DELETE",
     }),
 
   // SERVICES
-  getServices: () => request("/services"),
+  getServices: () => request("/api/services"),
   createService: (data) =>
-    request("/services", {
+    request("/api/services", {
       method: "POST",
       body: JSON.stringify(data),
     }),
   updateService: (id, data) =>
-    request(`/services/${id}`, {
+    request(`/api/services/${id}`, {
       method: "PUT",
       body: JSON.stringify(data),
     }),
   deleteService: (id) =>
-    request(`/services/${id}`, {
+    request(`/api/services/${id}`, {
       method: "DELETE",
     }),
 
   // CONTACTS
-  getContacts: () => request("/contacts"),
+  getContacts: () => request("/api/contacts"),
   createContact: (data) =>
-    request("/contacts", {
+    request("/api/contacts", {
       method: "POST",
       body: JSON.stringify(data),
     }),
   updateContact: (id, data) =>
-    request(`/contacts/${id}`, {
+    request(`/api/contacts/${id}`, {
       method: "PUT",
       body: JSON.stringify(data),
     }),
   deleteContact: (id) =>
-    request(`/contacts/${id}`, {
+    request(`/api/contacts/${id}`, {
       method: "DELETE",
     }),
 };
